@@ -31,6 +31,7 @@ export default function HomePage() {
             <Link to="/register" className="rounded-xl bg-white px-4 py-2 text-slate-900">{t.getStarted}</Link>
             <Link to="/sos" className="rounded-xl bg-brand-emergency px-4 py-2">{t.emergencySOS}</Link>
             <Link to="/ambulance" className="rounded-xl bg-brand-success px-4 py-2">{t.bookAmbulance}</Link>
+            <Link to="/complaints" className="rounded-xl bg-blue-600 px-4 py-2 text-white">File Complaint</Link>
           </div>
         </div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass rounded-3xl p-6">
