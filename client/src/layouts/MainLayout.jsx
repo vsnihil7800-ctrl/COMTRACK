@@ -9,6 +9,17 @@ import { socket } from "../services/socket";
 export default function MainLayout() {
   const [dark, setDark] = useState(true);
   const [lang, setLang] = useState("en");
+
+  useEffect(() => {
+    if (dark) {
+      document.body.classList.remove("light");
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+      document.body.classList.add("light");
+    }
+  }, [dark]);
+
   useEffect(() => {
     const onNotification = (payload) => {
       toast(payload.title ? `${payload.title}: ${payload.message}` : payload.message || "New update");
@@ -27,8 +38,9 @@ export default function MainLayout() {
       socket.off("sos:new", onSos);
     };
   }, []);
+
   return (
-    <div className={dark ? "dark" : ""}>
+    <div className={dark ? "dark" : "light"}>
       <Navbar dark={dark} setDark={setDark} lang={lang} setLang={setLang} />
       <main className="container-app py-8">
         <Outlet context={{ lang }} />

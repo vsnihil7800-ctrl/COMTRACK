@@ -8,6 +8,24 @@ body {
     radial-gradient(circle at 85% 20%, rgba(225, 29, 72, 0.14), transparent 20%);
 }
 
+body.light {
+  background: #f1f5f9 !important;
+  background-image: none !important;
+  color: #0f172a !important;
+}
+
+body.light .glass {
+  background: rgba(255,255,255,0.7) !important;
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  color: #0f172a !important;
+}
+
+body.light .text-slate-100,
+body.light .text-slate-200,
+body.light .text-slate-300 {
+  color: #334155 !important;
+}
+
 .glass {
   @apply bg-white/10 backdrop-blur-xl border border-white/20 shadow-glass;
 }
@@ -16,10 +34,6 @@ body {
   @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
 }
 
-button,
-a,
-input,
-select,
-textarea {
+button, a, input, select, textarea {
   transition: all 0.2s ease;
 }
