@@ -1,0 +1,9 @@
+{
+  "name": "COMTRACK",
+  "short_name": "COMTRACK",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A1F44",
+  "theme_color": "#0A1F44",
+  "icons": []
+}

@@ -1,0 +1,20 @@
+entrypoint = "README.md"
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Run COMTRACK"
+
+[[workflows.workflow]]
+name = "Run COMTRACK"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run install:all && npm run dev:server"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev:client"

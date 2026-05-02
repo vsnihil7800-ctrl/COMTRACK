@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-slate-950 text-slate-100 antialiased;
+  background-image: radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.18), transparent 25%),
+    radial-gradient(circle at 85% 20%, rgba(225, 29, 72, 0.14), transparent 20%);
+}
+
+.glass {
+  @apply bg-white/10 backdrop-blur-xl border border-white/20 shadow-glass;
+}
+
+.container-app {
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  transition: all 0.2s ease;
+}
