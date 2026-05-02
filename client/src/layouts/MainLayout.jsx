@@ -7,7 +7,13 @@ import VoiceCommandButton from "../components/VoiceCommandButton";
 import { socket } from "../services/socket";
 
 export default function MainLayout() {
-  const [dark, setDark] = useState(true);
+  useEffect(() => {
+    if (dark) {
+      document.body.classList.remove("light");
+    } else {
+      document.body.classList.add("light");
+    }
+  }, [dark]);
   const [lang, setLang] = useState("en");
   useEffect(() => {
     const onNotification = (payload) => {
