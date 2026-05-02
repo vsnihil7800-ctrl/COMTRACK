@@ -6,6 +6,7 @@ export default function Navbar({ dark, setDark, lang, setLang }) {
     ["Home", "/"],
     ["Features", "/features"],
     ["Dashboard", "/dashboard"],
+    ["Complaints", "/complaints"],
     ["SOS", "/sos"]
   ];
   return (
