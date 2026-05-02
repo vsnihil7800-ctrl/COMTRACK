@@ -7,7 +7,8 @@ export default function Navbar({ dark, setDark, lang, setLang }) {
     ["Features", "/features"],
     ["Dashboard", "/dashboard"],
     ["Complaints", "/complaints"],
-    ["SOS", "/sos"]
+    ["SOS", "/sos"],
+    ["Profile", "/profile"]
   ];
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur-lg">
