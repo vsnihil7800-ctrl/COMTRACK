@@ -2,46 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark mode (default) */
 body {
   @apply bg-slate-950 text-slate-100 antialiased;
   background-image: radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.18), transparent 25%),
     radial-gradient(circle at 85% 20%, rgba(225, 29, 72, 0.14), transparent 20%);
 }
 
-/* Light mode */
-body.light {
-  @apply bg-slate-100 text-slate-900;
-  background-image: radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.08), transparent 25%),
-    radial-gradient(circle at 85% 20%, rgba(225, 29, 72, 0.06), transparent 20%);
-}
-
 .glass {
   @apply bg-white/10 backdrop-blur-xl border border-white/20 shadow-glass;
-}
-
-body.light .glass {
-  @apply bg-black/5 backdrop-blur-xl border border-black/10;
-}
-
-body.light .text-slate-100 {
-  @apply text-slate-900;
-}
-
-body.light .text-slate-200 {
-  @apply text-slate-700;
-}
-
-body.light .text-slate-300 {
-  @apply text-slate-600;
-}
-
-body.light .text-slate-400 {
-  @apply text-slate-500;
-}
-
-body.light .bg-white\/10 {
-  @apply bg-black/5;
 }
 
 .container-app {
