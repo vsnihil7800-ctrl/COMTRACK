@@ -1,8 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
 import { Moon, Sun } from "lucide-react";
 import { copy } from "../utils/translations";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Navbar({ dark, setDark, lang, setLang }) {
+  const { user } = useAuth();
   const t = copy[lang] || copy["en"];
 
   const nav = [
@@ -11,7 +13,8 @@ export default function Navbar({ dark, setDark, lang, setLang }) {
     ["Dashboard", "/dashboard"],
     ["Complaints", "/complaints"],
     ["SOS", "/sos"],
-    ["Profile", "/profile"]
+    ["Profile", "/profile"],
+    ...(user?.role === "admin" ? [["Admin", "/admin"]] : [])
   ];
 
   return (
@@ -28,9 +31,9 @@ export default function Navbar({ dark, setDark, lang, setLang }) {
               key={href}
               to={href}
               style={({ isActive }) => ({
-                color: isActive ? "#ffffff" : "#cbd5e1",
+                color: label === "Admin" ? (isActive ? "#ef4444" : "#f87171") : (isActive ? "#ffffff" : "#cbd5e1"),
                 fontSize: "14px",
-                fontWeight: "500",
+                fontWeight: label === "Admin" ? "700" : "500",
                 textDecoration: "none"
               })}
             >
