@@ -6,61 +6,70 @@ export default function Navbar({ dark, setDark, lang, setLang }) {
   const t = copy[lang] || copy["en"];
 
   const nav = [
-    [t.home || "Home", "/"],
-    [t.features || "Features", "/features"],
-    [t.dashboard || "Dashboard", "/dashboard"],
-    [t.complaints || "Complaints", "/complaints"],
-    [t.sos || "SOS", "/sos"],
-    [t.profile || "Profile", "/profile"]
+    ["Home", "/"],
+    ["Features", "/features"],
+    ["Dashboard", "/dashboard"],
+    ["Complaints", "/complaints"],
+    ["SOS", "/sos"],
+    ["Profile", "/profile"]
   ];
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur-lg">
       <div className="container-app flex h-16 items-center justify-between">
+
         <Link to="/" className="font-bold tracking-wide text-white">
           COMTRACK
         </Link>
 
-        <nav className="flex items-center gap-5">
+        <nav style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           {nav.map(([label, href]) => (
             <NavLink
               key={href}
               to={href}
-              className={({ isActive }) =>
-                `text-sm font-medium transition-colors ${
-                  isActive ? "text-white" : "text-slate-300 hover:text-white"
-                }`
-              }
+              style={({ isActive }) => ({
+                color: isActive ? "#ffffff" : "#cbd5e1",
+                fontSize: "14px",
+                fontWeight: "500",
+                textDecoration: "none"
+              })}
             >
               {label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <select
             value={lang}
             onChange={(e) => setLang(e.target.value)}
-            className="glass rounded-full px-3 py-1 text-xs bg-slate-800 text-white border border-white/20"
+            style={{
+              borderRadius: "999px",
+              padding: "4px 12px",
+              fontSize: "12px",
+              background: "#1e293b",
+              color: "white",
+              border: "1px solid rgba(255,255,255,0.2)"
+            }}
           >
             <option value="en">English</option>
-            <option value="hi">हिंदी</option>
             <option value="ta">தமிழ்</option>
-            <option value="te">తెలుగు</option>
-            <option value="kn">ಕನ್ನಡ</option>
-            <option value="ml">മലയാളം</option>
-            <option value="mr">मराठी</option>
-            <option value="bn">বাংলা</option>
-            <option value="pa">ਪੰਜਾਬੀ</option>
-            <option value="ur">اردو</option>
           </select>
           <button
             onClick={() => setDark((v) => !v)}
-            className="glass rounded-full p-2"
+            style={{
+              borderRadius: "999px",
+              padding: "8px",
+              background: "#1e293b",
+              border: "1px solid rgba(255,255,255,0.2)",
+              cursor: "pointer",
+              color: "white"
+            }}
           >
             {dark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
         </div>
+
       </div>
     </header>
   );
