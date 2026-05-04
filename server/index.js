@@ -36,12 +36,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(
-  cors({
-    origin: (process.env.CLIENT_URL || "http://localhost:5173").split(","),
-    credentials: true
-  })
-);
+app.use(cors({
+  origin: (process.env.CLIENT_URL || "http://localhost:5173").split(","),
+  credentials: true
+}));
 app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 350 }));
 app.use(mongoSanitize());
