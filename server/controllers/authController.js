@@ -34,10 +34,11 @@ export async function register(req, res) {
   });
 
   const verifyLink = `${process.env.CLIENT_URL || "http://localhost:5173"}/verify-email?token=${verificationToken}&email=${encodeURIComponent(email)}`;
-  await sendEmail({
+  sendEmail({
     to: email,
     subject: "Verify your COMTRACK account",
     html: `<p>Welcome to COMTRACK.</p><p>Verify your email here: <a href="${verifyLink}">${verifyLink}</a></p>`
+}).catch(() => console.log("Email send failed but registration continues"));
   });
 
   const payload = authPayload(user);
