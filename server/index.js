@@ -20,7 +20,9 @@ import { sanitizeBody } from "./middleware/sanitizeBody.js";
 
 dotenv.config();
 
-app.set('trust proxy', 1);
+const app = express();
+app.set("trust proxy", 1);
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
@@ -41,8 +43,8 @@ app.use(
   })
 );
 app.use(helmet());
-app.set("trust proxy", 1);
-app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 350 }));app.use(mongoSanitize());
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 350 }));
+app.use(mongoSanitize());
 app.use(hpp());
 app.use(express.json({ limit: "10mb" }));
 app.use("/uploads", express.static(process.env.UPLOAD_DIR || "uploads"));
