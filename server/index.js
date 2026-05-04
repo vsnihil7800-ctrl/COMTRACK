@@ -41,8 +41,8 @@ app.use(
   })
 );
 app.use(helmet());
-app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 350 }));
-app.use(mongoSanitize());
+app.set("trust proxy", 1);
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 350 }));app.use(mongoSanitize());
 app.use(hpp());
 app.use(express.json({ limit: "10mb" }));
 app.use("/uploads", express.static(process.env.UPLOAD_DIR || "uploads"));
