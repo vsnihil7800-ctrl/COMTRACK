@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AmbulanceTracker from "../components/AmbulanceTracker";
 import { api } from "../services/api";
 import toast from "react-hot-toast";
 
@@ -155,6 +156,9 @@ export default function SOSPage() {
                 ))}
               </div>
             </div>
+            {emergencyType === "medical" && (
+  <AmbulanceTracker location={location} />
+)}
             <button onClick={reset} className="w-full rounded-xl bg-slate-700 hover:bg-slate-600 py-2 text-sm text-slate-200">
               🔄 Reset SOS
             </button>
