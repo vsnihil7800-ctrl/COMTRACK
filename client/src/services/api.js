@@ -39,3 +39,9 @@ api.interceptors.response.use(
     }
   }
 );
+
+// Keep Render backend alive - ping every 10 minutes
+setInterval(() => {
+  fetch("https://comtrack.onrender.com")
+    .catch(() => {}); // silent fail
+}, 10 * 60 * 1000);
