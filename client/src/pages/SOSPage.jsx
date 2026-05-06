@@ -55,7 +55,7 @@ export default function SOSPage() {
         setLocation({ lat, lng });
         setStatus("sending");
         try {
-          const { data } = await api.post("/sos/create", { name: "User", emergencyType, latitude: lat, longitude: lng });
+          const { data } = await api.post("/sos/create", { emergencyType, location: { lat, lng }, locationName: "Current Location" });
           setSosResult(data);
           setStatus("done");
           toast.success("SOS Alert Sent!");
@@ -69,7 +69,7 @@ export default function SOSPage() {
         setLocation({ lat, lng });
         setStatus("sending");
         try {
-          const { data } = await api.post("/sos/create", { name: "User", emergencyType, latitude: lat, longitude: lng });
+          const { data } = await api.post("/sos/create", { emergencyType, location: { lat, lng }, locationName: "Current Location" });
           setSosResult(data);
           setStatus("done");
           toast.success("SOS Alert Sent!");
