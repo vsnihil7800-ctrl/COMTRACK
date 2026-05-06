@@ -37,7 +37,7 @@ export default function SOSPage() {
 
   const fetchHistory = async () => {
     try {
-      const { data } = await api.get("/sos");
+      const { data } = await api.get("/sos/history");
       setHistory(data.alerts || []);
       setShowHistory(true);
     } catch {
@@ -55,7 +55,7 @@ export default function SOSPage() {
         setLocation({ lat, lng });
         setStatus("sending");
         try {
-          const { data } = await api.post("/sos", { name: "User", emergencyType, latitude: lat, longitude: lng });
+          const { data } = await api.post("/sos/create", { name: "User", emergencyType, latitude: lat, longitude: lng });
           setSosResult(data);
           setStatus("done");
           toast.success("SOS Alert Sent!");
@@ -69,7 +69,7 @@ export default function SOSPage() {
         setLocation({ lat, lng });
         setStatus("sending");
         try {
-          const { data } = await api.post("/sos", { name: "User", emergencyType, latitude: lat, longitude: lng });
+          const { data } = await api.post("/sos/create", { name: "User", emergencyType, latitude: lat, longitude: lng });
           setSosResult(data);
           setStatus("done");
           toast.success("SOS Alert Sent!");
