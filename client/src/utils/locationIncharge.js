@@ -12,6 +12,8 @@ export const pincodeInchargeMap = {
   "560038": { area: "JP Nagar", city: "Bangalore", name: "Venkat Rao", phone: "9876501038", department: "BBMP South Zone" },
   "560068": { area: "Electronic City", city: "Bangalore", name: "Deepak Menon", phone: "9876501068", department: "BBMP South Zone" },
   "560076": { area: "Whitefield", city: "Bangalore", name: "Arun Kumar", phone: "9876501076", department: "BBMP East Zone" },
+  "560047": { area: "Koramangala", city: "Bangalore", name: "Suresh Babu", phone: "9876501047", department: "BBMP South Zone" },
+  "560102": { area: "HSR Layout", city: "Bangalore", name: "Ganesh Kumar", phone: "9876501102", department: "BBMP South Zone" },
   "560103": { area: "Hebbal", city: "Bangalore", name: "Sanjay Patil", phone: "9876501103", department: "BBMP North Zone" },
 
   // ── CHENNAI ────────────────────────────────────────────────────────────────
