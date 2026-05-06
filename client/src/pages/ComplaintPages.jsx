@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { api } from "../services/api";
 import toast from "react-hot-toast";
 import SkeletonCard from "../components/SkeletonCard";
+import { getLocationIncharge } from "../utils/locationIncharge";
 
-// ── Static category → authority mapping
+// ── Static category → authority mapping ──────────────────────────────────────
 const contactMap = {
   garbage:       { name: "Sanitation Supervisor",      phone: "9871234560" },
   street_light:  { name: "Municipal Lighting Officer", phone: "9765432100" },
@@ -15,26 +16,54 @@ const contactMap = {
   public_safety: { name: "Public Safety Officer",      phone: "9432109876" },
 };
 
+// ── Complaint Submit Page ─────────────────────────────────────────────────────
 export function ComplaintSubmitPage() {
   const [form, setForm] = useState({
-    fullName: "",
-    mobile: "",
-    email: "",
-    address: "",
-    city: "",
-    description: "",
-    category: "",
-    priority: "medium",
+    fullName: "", mobile: "", email: "",
+    address: "", city: "", description: "",
+    category: "", priority: "medium",
   });
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [contact, setContact] = useState(null);
+
+  // Location state
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationIncharge, setLocationIncharge] = useState(null);
+  const [locationError, setLocationError] = useState("");
+  const [pincode, setPincode] = useState("");
+
   const [ticket, setTicket] = useState(null);
   const [media, setMedia] = useState(null);
   const [preview, setPreview] = useState("");
   const [uploadUrl, setUploadUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  // ── Auto-fetch location on mount ───────────────────────────────────────────
+  useEffect(() => {
+    fetchLocation();
+  }, []);
+
+  const fetchLocation = async () => {
+    setLocationLoading(true);
+    setLocationError("");
+    setLocationIncharge(null);
+    const result = await getLocationIncharge();
+    setLocationLoading(false);
+
+    if (result.error) {
+      setLocationError(result.error);
+      return;
+    }
+    setPincode(result.pincode);
+    if (result.incharge) {
+      setLocationIncharge(result.incharge);
+      toast.success(`📍 Area incharge found for ${result.incharge.area}!`);
+    } else {
+      setLocationError(`No incharge mapped for pincode ${result.pincode} yet.`);
+    }
+  };
 
   const handleCategoryChange = (e) => {
     const val = e.target.value;
@@ -68,8 +97,10 @@ export function ComplaintSubmitPage() {
       setSubmitting(true);
       const { data } = await api.post("/complaints/create", {
         ...form,
-        assignedTo: contact?.name || "",
-        contactNumber: contact?.phone || "",
+        assignedTo: locationIncharge?.name || contact?.name || "",
+        contactNumber: locationIncharge?.phone || contact?.phone || "",
+        area: locationIncharge?.area || "",
+        pincode,
         photoUrl: uploadUrl,
         mediaType: media?.type,
       });
@@ -87,6 +118,7 @@ export function ComplaintSubmitPage() {
       <h1 className="mb-4 text-3xl font-bold">Complaint Submission</h1>
       <form onSubmit={submit} className="grid gap-3 md:grid-cols-2">
 
+        {/* Existing text fields */}
         {["fullName", "mobile", "email", "address", "city"].map((k) => (
           <input
             key={k}
@@ -97,6 +129,7 @@ export function ComplaintSubmitPage() {
           />
         ))}
 
+        {/* Category dropdown */}
         <select
           className="rounded-lg bg-white/10 p-2"
           value={selectedCategory}
@@ -113,11 +146,11 @@ export function ComplaintSubmitPage() {
           <option value="public_safety">Public Safety</option>
         </select>
 
-        {contact && (
+        {/* Category contact info */}
+        {contact && !locationIncharge && (
           <div className="md:col-span-2 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-3 text-sm">
             <p className="text-slate-300">
-              <span className="font-semibold text-white">Assigned To: </span>
-              {contact.name}
+              <span className="font-semibold text-white">Assigned To: </span>{contact.name}
             </p>
             <p className="text-slate-300 mt-1">
               <span className="font-semibold text-white">Contact Number: </span>
@@ -126,6 +159,52 @@ export function ComplaintSubmitPage() {
           </div>
         )}
 
+        {/* ── LOCATION INCHARGE BOX ── */}
+        <div className="md:col-span-2">
+          {locationLoading && (
+            <div className="rounded-lg border border-slate-500/30 bg-slate-500/10 px-4 py-3 text-sm text-slate-300 flex items-center gap-2">
+              <span className="animate-spin">⏳</span> Detecting your location...
+            </div>
+          )}
+
+          {locationIncharge && (
+            <div className="rounded-lg border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm">
+              <p className="text-green-400 font-semibold mb-2 flex items-center gap-1">
+                📍 Area Incharge Detected
+                <span className="text-xs text-slate-400 font-normal ml-1">({locationIncharge.area}, {locationIncharge.city} - {pincode})</span>
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <p className="text-xs text-slate-400 uppercase tracking-wide">Incharge Name</p>
+                  <p className="text-white font-semibold">{locationIncharge.name}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-400 uppercase tracking-wide">Contact Number</p>
+                  <p className="text-orange-400 font-mono font-semibold">{locationIncharge.phone}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-xs text-slate-400 uppercase tracking-wide">Department</p>
+                  <p className="text-slate-300">{locationIncharge.department}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {locationError && (
+            <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm flex items-center justify-between">
+              <p className="text-yellow-400">⚠️ {locationError}</p>
+              <button
+                type="button"
+                onClick={fetchLocation}
+                className="text-xs bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-300 px-2 py-1 rounded-md"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Description */}
         <textarea
           className="rounded-lg bg-white/10 p-2 md:col-span-2"
           placeholder="Complaint Description"
@@ -133,6 +212,7 @@ export function ComplaintSubmitPage() {
           onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
 
+        {/* File upload */}
         <div className="md:col-span-2">
           <input
             type="file"
@@ -153,11 +233,10 @@ export function ComplaintSubmitPage() {
             {uploading ? "Uploading..." : "Upload Image"}
           </button>
           {uploadUrl && <p className="mt-1 text-xs text-green-400">✓ Image uploaded</p>}
-          {preview && (
-            <img src={preview} alt="complaint preview" className="mt-3 max-h-44 rounded-lg object-cover" />
-          )}
+          {preview && <img src={preview} alt="preview" className="mt-3 max-h-44 rounded-lg object-cover" />}
         </div>
 
+        {/* Submit button */}
         <button
           className="rounded-lg bg-white p-2 text-slate-900 md:col-span-2 disabled:opacity-50"
           disabled={submitting}
@@ -165,11 +244,13 @@ export function ComplaintSubmitPage() {
           {submitting ? "Submitting..." : "Submit & Notify Authority"}
         </button>
       </form>
+
       {ticket && <p className="mt-3 text-green-400">✓ Ticket generated: {ticket}</p>}
     </section>
   );
 }
 
+// ── Complaint Tracking Page ───────────────────────────────────────────────────
 export function ComplaintTrackingPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -186,9 +267,7 @@ export function ComplaintTrackingPage() {
     <section className="space-y-3">
       <h1 className="text-3xl font-bold">Complaint Tracking</h1>
       {loading && [1, 2, 3].map((k) => <SkeletonCard key={k} />)}
-      {!loading && items.length === 0 && (
-        <p className="text-slate-400">No complaints found.</p>
-      )}
+      {!loading && items.length === 0 && <p className="text-slate-400">No complaints found.</p>}
       {items.map((c) => (
         <div key={c._id} className="glass rounded-xl p-4">
           <p className="font-semibold">{c.ticketId} - {c.category}</p>
@@ -201,6 +280,7 @@ export function ComplaintTrackingPage() {
               )}
             </p>
           )}
+          {c.area && <p className="text-xs text-slate-400">📍 {c.area} {c.pincode && `- ${c.pincode}`}</p>}
           <p className="text-xs text-slate-400">{new Date(c.createdAt).toLocaleDateString()}</p>
         </div>
       ))}
